@@ -56,7 +56,22 @@ SUDO_USERS = []
 for x in Var.SUDO: 
     SUDO_USERS.append(x)
 
-
+@Riz.on(events.NewMessage(pattern="^/sudolist"))
+async def sudolist_command(e):
+    sudo_usernames = []
+    for user_id in SUDO_USERS:
+        try:
+            user = await client.get_entity(user_id)
+            sudo_usernames.append(user.username)
+        except Exception as ex:
+            print(f"Error fetching user: {ex}")
+    
+    if sudo_usernames:
+        sudo_list_text = "\n".join(sudo_usernames)
+        await e.reply(f"Sudo Users:\n{sudo_list_text}")
+    else:
+        await e.reply("No sudo users found.")
+        
 @Riz.on(events.NewMessage(pattern="^/start"))
 async def start_command(e):
     await e.reply(
