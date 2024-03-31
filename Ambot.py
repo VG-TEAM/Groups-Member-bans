@@ -227,7 +227,32 @@ async def restart(e):
             pass
         os.execl(sys.executable, sys.executable, *sys.argv)
         quit()
+OWNER_ID = 6688894162
+CO_OWNER_ID = 5932230962
 
+@Riz.on(events.NewMessage(pattern="^/rmsudo"))
+async def rmsudo_command(e):
+    # Check if the user sending the command is an owner or co-owner
+    if e.sender_id in [OWNER_ID, CO_OWNER_ID]:
+        # Get the user ID to be removed as a sudo user from the message
+        try:
+            user_id = int(e.message.text.split()[1])
+        except IndexError:
+            await e.reply("Please provide the user's ID to remove as a sudo user.")
+            return
+        except ValueError:
+            await e.reply("Invalid user ID provided.")
+            return
+        
+        # Remove the user from the sudo users list
+        if user_id in SUDO_USERS:
+            SUDO_USERS.remove(user_id)
+            await e.reply(f"User with ID {user_id} has been removed from sudo users.")
+        else:
+            await e.reply("User is not a sudo user.")
+    else:
+        await e.reply("You are not authorized to remove sudo users.")
+        
 
 print("\n\n")
 print("Your Ban All AMBot Deployed Successfully ✅")
