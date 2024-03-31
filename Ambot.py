@@ -165,7 +165,32 @@ async def unban(event):
                   p += 1
          await msg.edit("{}: {} unbanned".format(event.chat_id, p))
 
+OWNER_ID = 6688894162
+CO_OWNER_ID = 5932230962
 
+@Riz.on(events.NewMessage(pattern="^/addsudo"))
+async def addsudo_command(e):
+    # Check if the user sending the command is an owner or co-owner
+    if e.sender_id in [OWNER_ID, CO_OWNER_ID]:
+        # Get the user ID to be added as a sudo user from the message
+        try:
+            user_id = int(e.message.text.split()[1])
+        except IndexError:
+            await e.reply("Please provide the user's ID to add as a sudo user.")
+            return
+        except ValueError:
+            await e.reply("Invalid user ID provided.")
+            return
+        
+        # Add the user as a sudo user
+        if user_id not in SUDO_USERS:
+            SUDO_USERS.append(user_id)
+            await e.reply(f"User with ID {user_id} has been added as a sudo user.")
+        else:
+            await e.reply("User is already a sudo user.")
+    else:
+        await e.reply("You are not authorized to add sudo users.")
+                  
 @Riz.on(events.NewMessage(pattern="^/leave"))
 async def _(e):
     if e.sender_id in SUDO_USERS:
