@@ -15,6 +15,7 @@ from asyncio import sleep
 from telethon.tl.types import ChatBannedRights, ChannelParticipantsAdmins, ChatAdminRights
 from telethon.tl.functions.channels import EditBannedRequest
 from datetime import datetime
+from telethon.tl.custom import Button  # Add this import statement at the beginning of your script
 from var import Var
 from time import sleep
 from telethon.errors.rpcerrorlist import FloodWaitError
@@ -54,6 +55,8 @@ Riz = TelegramClient('Riz', Var.API_ID, Var.API_HASH).start(bot_token=Var.BOT_TO
 SUDO_USERS = []
 for x in Var.SUDO: 
     SUDO_USERS.append(x)
+
+
 @Riz.on(events.NewMessage(pattern="^/start"))
 async def start_command(e):
     await e.reply(
@@ -61,6 +64,7 @@ async def start_command(e):
         file="https://telegra.ph/file/fff2ee6f504bc061cb7d3.jpg",
         buttons=[[Button.url("ᴏᴡɴᴇʀ", url=f"https://t.me/hello")]]
     )
+    
     
 
 
